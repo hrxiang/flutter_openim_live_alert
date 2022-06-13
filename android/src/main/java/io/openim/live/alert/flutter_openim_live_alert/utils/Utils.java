@@ -43,8 +43,6 @@ public class Utils {
     }
 
     public static void moveTaskToFront(Context context, String packageName, String activityName) {
-        System.out.println("================packageName: "+ packageName);
-        System.out.println("================activityName: "+ activityName);
         //如果APP是在后台运行
         if (!isRunningForeground(context)) {
             //获取ActivityManager
@@ -56,7 +54,6 @@ public class Utils {
                     //找到当前应用的task，并启动task的栈顶activity，达到程序切换到前台
                     if (rti.topActivity.getPackageName().equals(packageName)) {
                         activityManager.moveTaskToFront(rti.id, 0);
-                        System.out.println("================moveTaskToFront");
                         return;
                     }
                 }

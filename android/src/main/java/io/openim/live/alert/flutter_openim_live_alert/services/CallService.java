@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -21,7 +22,9 @@ import io.openim.live.alert.flutter_openim_live_alert.R;
 public class CallService extends Service {
     private WindowManager mWindowManager;
     private View mFloatingView;
-    private TextView mTipsView;
+    private TextView mTitleView;
+    private Button mRejectButton;
+    private TextView mAcceptButton;
     private final Point szWindow = new Point();
 
     @Nullable
@@ -43,13 +46,13 @@ public class CallService extends Service {
         // Inflate the floating view layout we created
         mFloatingView = inflater.inflate(R.layout.call, null);
 
-        mTipsView = mFloatingView.findViewById(R.id.tv_tips);
-        final TextView rejectButton = mFloatingView.findViewById(R.id.btn_reject);
-        final TextView acceptButton = mFloatingView.findViewById(R.id.btn_accept);
-        rejectButton.setOnClickListener(view -> {
+        mTitleView = mFloatingView.findViewById(R.id.tv_title);
+        mRejectButton = mFloatingView.findViewById(R.id.btn_reject);
+        mAcceptButton = mFloatingView.findViewById(R.id.btn_accept);
+        mRejectButton.setOnClickListener(view -> {
             FlutterOpenimLiveAlertPlugin.channel.invokeMethod("reject", null);
         });
-        acceptButton.setOnClickListener(view -> {
+        mAcceptButton.setOnClickListener(view -> {
             FlutterOpenimLiveAlertPlugin.channel.invokeMethod("accept", null);
         });
         // Add the view to the window.
@@ -75,7 +78,7 @@ public class CallService extends Service {
 
         // Initially view will be added to top-left corner, you change x-y coordinates according to your need
         params.x = 0;
-//        params.y = 300;
+        params.y = 20;
 
         // Add the view to the window
         mWindowManager.addView(mFloatingView, params);
@@ -95,20 +98,26 @@ public class CallService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String tips = intent.getStringExtra("title");
-        if (null != tips) {
-            mTipsView.setText(tips);
+        String title = intent.getStringExtra("title");
+        String rejectText = intent.getStringExtra("rejectText");
+        String acceptText = intent.getStringExtra("acceptText");
+        if (null != title) {
+            mTitleView.setText(title);
+        }
+        if (null != rejectText) {
+            mRejectButton.setText(rejectText);
+        }
+        if (null != acceptText) {
+            mAcceptButton.setText(acceptText);
         }
         return START_STICKY;
     }
 
-    public static void startService(Context activity, String title) {
-//        Intent i = new Intent();
-//        i.setAction(Intent.ACTION_MAIN);
-//        i.addCategory(Intent.CATEGORY_HOME);
-//        activity.startActivity(i);
+    public static void startService(Context activity, String title, String rejectText, String acceptText) {
         Intent intent = new Intent(activity, CallService.class);
         intent.putExtra("title", title);
+        intent.putExtra("rejectText", rejectText);
+        intent.putExtra("acceptText", acceptText);
         activity.startService(intent);
     }
 

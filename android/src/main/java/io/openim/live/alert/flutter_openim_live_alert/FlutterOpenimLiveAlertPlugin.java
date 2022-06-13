@@ -37,28 +37,16 @@ public class FlutterOpenimLiveAlertPlugin implements FlutterPlugin, MethodCallHa
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         switch (call.method) {
-            case "showAlert":
+            case "showLiveAlert":
                 String title = call.argument("title");
-                CallService.startService(activity, title);
+                String rejectText = call.argument("rejectText");
+                String acceptText = call.argument("acceptText");
+                CallService.startService(activity, title, rejectText, acceptText);
                 break;
-            case "closeAlert":
+            case "closeLiveAlert":
                 CallService.stopService(activity);
                 break;
-            case "moveTaskToFront": {
-                String packageName = call.argument("packageName");
-                String activityName = call.argument("activityName");
-                if (null == packageName) {
-                    packageName = activity.getPackageName();
-                }
-                Utils.moveTaskToFront(activity, activity.getPackageName(), activityName);
-                break;
-            }
-            case "startActivity": {
-                String activityName = call.argument("activityName");
-                Utils.startActivity(activity, activityName);
-                break;
-            }
-            case "closeAlertAndMoveTaskToFront": {
+            case "closeLiveAlertAndMoveTaskToFront": {
                 CallService.stopService(activity);
                 String packageName = call.argument("packageName");
                 String activityName = call.argument("activityName");

@@ -7,48 +7,31 @@ class FlutterOpenimLiveAlert {
   static const MethodChannel _channel =
       MethodChannel('flutter_openim_live_alert');
 
-  static Future? moveTaskToFront({
-    String activityName = 'io.openim.app.enterprisechat.MainActivity',
-    String? packageName,
-  }) async {
+  static Future? showLiveAlert(
+      {String? title, String? rejectText, String? acceptText}) async {
     if (Platform.isAndroid) {
-      return _channel.invokeMethod('moveTaskToFront', {
-        'activityName': activityName,
-        'packageName': packageName,
+      return _channel.invokeMethod('showLiveAlert', {
+        'title': title,
+        'rejectText': rejectText,
+        'acceptText': acceptText,
       });
-    }
-    return null;
-  }
-
-  static Future? startActivity({required String activityName}) async {
-    if (Platform.isAndroid) {
-      return _channel.invokeMethod('startActivity', {
-        'activityName': activityName,
-      });
-    }
-    return null;
-  }
-
-  static Future? showLiveAlert({String? title}) async {
-    if (Platform.isAndroid) {
-      return _channel.invokeMethod('showAlert', {'title': title});
     }
     return null;
   }
 
   static Future? closeLiveAlert() async {
     if (Platform.isAndroid) {
-      return _channel.invokeMethod('closeAlert');
+      return _channel.invokeMethod('closeLiveAlert');
     }
     return null;
   }
 
-  static Future? closeAlertAndMoveTaskToFront({
+  static Future? closeLiveAlertAndMoveTaskToFront({
     String activityName = 'io.openim.app.enterprisechat.MainActivity',
     String? packageName,
   }) async {
     if (Platform.isAndroid) {
-      return _channel.invokeMethod('closeAlertAndMoveTaskToFront', {
+      return _channel.invokeMethod('closeLiveAlertAndMoveTaskToFront', {
         'activityName': activityName,
         'packageName': packageName,
       });
@@ -66,7 +49,7 @@ class FlutterOpenimLiveAlert {
             break;
           case 'accept':
             onAccept?.call();
-            closeAlertAndMoveTaskToFront();
+            closeLiveAlertAndMoveTaskToFront();
             break;
         }
         return null;
