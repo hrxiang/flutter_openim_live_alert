@@ -53,6 +53,7 @@ public class FlutterOpenimLiveAlertPlugin implements FlutterPlugin, MethodCallHa
                 if (null == packageName) {
                     packageName = activity.getPackageName();
                 }
+
                 Utils.moveTaskToFront(activity, activity.getPackageName(), activityName);
                 break;
             }

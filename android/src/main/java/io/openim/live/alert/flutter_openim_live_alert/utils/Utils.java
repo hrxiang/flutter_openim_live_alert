@@ -54,7 +54,7 @@ public class Utils {
                     //找到当前应用的task，并启动task的栈顶activity，达到程序切换到前台
                     if (rti.topActivity.getPackageName().equals(packageName)) {
                         activityManager.moveTaskToFront(rti.id, 0);
-                        return;
+//                        return;
                     }
                 }
             }
@@ -70,7 +70,7 @@ public class Utils {
         try {
             Class<?> clazz = Class.forName(activityName);
             Intent intent = new Intent(context, clazz);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             context.startActivity(intent);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
