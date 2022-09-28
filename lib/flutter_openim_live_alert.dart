@@ -26,8 +26,9 @@ class FlutterOpenimLiveAlert {
     return null;
   }
 
+  ///[activityName] xxx.xxx.xxx.MainAcitivty 首页全路径
   static Future? closeLiveAlertAndMoveTaskToFront({
-    String activityName = 'io.openim.app.enterprisechat.MainActivity',
+    String? activityName,
     String? packageName,
   }) async {
     if (Platform.isAndroid) {
@@ -39,7 +40,11 @@ class FlutterOpenimLiveAlert {
     return null;
   }
 
-  static buttonEvent({Function()? onReject, Function()? onAccept}) {
+  static buttonEvent({
+    Function()? onReject,
+    Function()? onAccept,
+    String? activityName,
+  }) {
     if (Platform.isAndroid) {
       _channel.setMethodCallHandler((call) async {
         switch (call.method) {
@@ -49,7 +54,9 @@ class FlutterOpenimLiveAlert {
             break;
           case 'accept':
             onAccept?.call();
-            closeLiveAlertAndMoveTaskToFront();
+            closeLiveAlertAndMoveTaskToFront(
+              activityName: activityName,
+            );
             break;
         }
         return null;
